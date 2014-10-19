@@ -14,16 +14,35 @@ library(shiny)
 
 
 # <<<<-----------------------------------------< UI >----------------------------------------->>>>
-shinyUI(pageWithSidebar(
+shinyUI(fluidPage(
 
     # Title
-    headerPanel('Titanic Survival Prediction')
+    headerPanel('Titanic Survival Analysis'),
     
-    # Sidebar
-    sidebarPanel()
+    sidebarLayout(
+        # Sidebar
+        sidebarPanel(
+            h4('Parameters'),
+            selectInput('dataset', "Survival factor:", 
+                        choices = c("gender", "class", "age", 'mulitple')),
+            helpText("This data is not done yet!"),
+            conditionalPanel(
+                condition = "input.dataset == 'mulitple'",
+                selectInput("smoothMethod", "Method",
+                            list("lm", "glm", "gam", "loess", "rlm"))
+            )
+        ),
     
-    # Main
-    mainPanel()
+        # Main
+        mainPanel(
+            h4('Analysis'),
+            tabsetPanel(
+                tabPanel("Summary", verbatimTextOutput("summary")), 
+                tabPanel("Table", tableOutput("table")),
+                tabPanel("Plot", plotOutput("plot"))
+            )
+        )
+    )
     
 ))
 
