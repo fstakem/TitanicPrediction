@@ -1,0 +1,65 @@
+---
+title: "Titanic Survival Analysis"
+author: "Fredrick Stakem"
+date: "October 20, 2014"
+output: ioslides_presentation
+---
+
+## Background Information
+
+- Titanic is well known disaster but few people know the details
+- There is a clear seperation of groups from data given on a popular Kaggle competition
+- A simple analysis shows men and 3rd class passengers much more likely to die
+- Even more complex analysis can be performed across many different features
+
+```{r, echo=FALSE}
+library(ggplot2)
+training_data <- read.csv('../raw_data/train.csv')
+```
+
+
+
+## Survival by Gender
+
+```{r, echo=FALSE}
+data <- training_data[, c('Sex', 'Survived')]
+gender_data <- table(data$Survived, data$Sex)
+        
+barplot(gender_data, 
+        ylab="People",
+        xlab="Gender", 
+        beside=TRUE,
+        col=c("lightblue3","darkolivegreen4"),
+        legend = c('Died', 'Survived'),
+        names.arg=c("Female", "Male"))
+```
+
+## Survival by Ticket Class
+
+```{r, echo=FALSE}
+data <- training_data[, c('Pclass', 'Survived')]
+survival_data <- table(data$Survived, data$Pclass)
+            
+barplot(survival_data, 
+        ylab="People",
+        xlab="Class", 
+        beside=TRUE,
+        col=c("lightblue3","darkolivegreen4"),
+        legend = c('Died', 'Survived'),
+        names.arg=c("1st", "2nd", "3rd"))
+```
+
+## Survival by Age
+
+```{r, echo=FALSE}
+data <- training_data[, c('Age', 'Survived')]
+data <- na.omit(data)
+row.names(data)<-NULL
+translation <- data.frame(Values=c(0, 1), Result=c('Died', 'Survived'))
+data <- merge(data, translation, by.x='Survived', by.y='Values')[,-1]
+
+ggplot(data, aes(x=Age, colour=Result, fill=Result)) + 
+    geom_density(alpha=.3) +
+    ggtitle("Passager Survival Likelihood based Upon Age")
+```
+

@@ -20,22 +20,27 @@ shinyUI(fluidPage(
     headerPanel('Titanic Survival Analysis'),
     
     sidebarLayout(
+        
         # Sidebar
         sidebarPanel(
-            h4('Parameters'),
-            selectInput('dataset', "Survival factor:", 
-                        choices = c("gender", "class", "age", 'mulitple')),
-            helpText("This data is not done yet!"),
+            h5('Survival factor'),
+            selectInput('dataset', label='',
+                        choices = c("gender", "class", "age", 'multiple')),
             conditionalPanel(
-                condition = "input.dataset == 'mulitple'",
-                selectInput("smoothMethod", "Method",
-                            list("lm", "glm", "gam", "loess", "rlm"))
+                condition = "input.dataset == 'multiple'",
+                br(),
+                h5('Gender'),
+                radioButtons('gender_radio', label='', c('All', 'Male', 'Female'), inline = TRUE),
+                br(),
+                h5('Class'),
+                checkboxInput('class_1_checkbox', '1st Class', value = TRUE),
+                checkboxInput('class_2_checkbox', '2nd Class', value = TRUE),
+                checkboxInput('class_3_checkbox', '3rd Class', value = TRUE)
             )
         ),
     
         # Main
         mainPanel(
-            h4('Analysis'),
             tabsetPanel(
                 tabPanel("Summary", verbatimTextOutput("summary")), 
                 tabPanel("Table", tableOutput("table")),
