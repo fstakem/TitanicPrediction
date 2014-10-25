@@ -16,7 +16,7 @@ library(ggplot2)
 library(plyr)
 
 # Get data
-training_data <- read.csv('../raw_data/train.csv')
+training_data <- read.csv('./train.csv')
 
 # <<<<-----------------------------------------< Server >----------------------------------------->>>>
 shinyServer(function(input, output) 
@@ -208,7 +208,7 @@ shinyServer(function(input, output)
             data <- data[data$Pclass %in% passenger_classes,]
             data <- na.omit(data)
             row.names(data)<-NULL
-            View(data)
+            
             survived_data <- subset(data, data$Survived==1)
             died_data <- subset(data, data$Survived==0)
             
